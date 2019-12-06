@@ -1,141 +1,138 @@
-# WebPerformanceDashboard
+# Deploy WebPerformanceDashboard on KintoHub
 
-- [Introduction](#Introduction)
-- [Requirements](#Requirements)
-- [Installation](#Installation)
-- [Run The project](#Run-The-project)
-- [Configuration](#Configuration)
-- [Dashboards Built-in](#Dashboards-Built-in)
-- [Develop `packages/lighthouse`](#develop-packageslighthouse)
-- [Test local container for `packages/lighthouse`](#test-local-container-for-packageslighthouse)
-- [Deploy your container](#Deploy-your-container)
-- [GitHub BOT](#GitHub-BOT)
-- [Troubleshooting](#Troubleshooting)
-- [Other Tips](#Other-Tips)
+This tutorial will show you how to deploy WebPerformanceDashboard on KintoHub.
+The deployment will include
+- A single node InfluxDB with no persistent disk and authentication disabled
+- A single instance of Lighthouse
+- A single instance of Grafana
 
-### Introduction
+**Note**
+You will deploy `influxdb` from the KintoHub catalog.
+Later, we will also add the kintoblocks from this tutorial in the catalog too.
 
-Web performance dashboard powered by Lighthouse, forked from [https://github.com/boyney123/garie](https://github.com/boyney123/garie)
-with addition of
+## Overview
 
-- Typescript
-- Monorepo approach
-- GitHub BOT
-- Removed Pagespeed Insights (now powered by lighthouse)
-- Latest lighthouse
-- Grafana dashboards with more details
-- more to come.. (Performance delta on target Branch, more metrics, parallel page analysis)
+__About WebPerformanceDashboard__
 
-### Requirements
+Web performance dashboard powered by Lighthouse. [Learn More](https://github.com/greenido/webperf-dashboard/)
 
-- docker >= 18 and Node >= 8
+__About KintoHub__
 
-### Installation
+KintoHub aligns teams to ship & operate cloud native apps with ease. [Learn More](https://www.kintohub.com)
 
-```bash
-git clone https://github.com/FeliceGeracitano/webperf-dashboard.git
-```
+## Repository
 
-### Run the project
+Fork the repository https://github.com/kintohub/webperf-dashboard.
 
-```bash
-$ docker-compose -f "docker-compose.yml" up -d --build
-```
+**Note**
+You will only use the `kinto` branch.
 
-open dashboard at `localhost`, user: `admin` pass: `secret`
+## Support
 
-> this will run 4 services `influxdb`, `chronograf`, `grafana` & `felicegeracitano/webperf-dashboard-lighthouse`
+Contact us on [Discord](https://discordapp.com/invite/jqDHRxD)
 
-### Configuration
+## KintoBlock
 
-In the root of the application there is a `config.json` file, which is propagated to `packages/lighthouse` during docker build step.
+Click **KintoBlocks** on the left menu.
 
-example,
+### Lighthouse
 
-```js
-{
-  "cron": "0 */10 * * * *",
-  "urls": [
-    { "url": "https://reactjs.org", "options": { "report": true } },
-    { "url": "https://vuejs.org", "options": { "report": true } },
-    { "url": "https://angular.io", "options": { "report": true } }
-  ]
-}
-```
+1. Click **Create KintoBlock**
+2. Choose [Website Block](https://docs.kintohub.com/docs/kintoblocks/websites)
+3. Choose the repo you forked previously
+4. Set the **Source Folder Path** to `/lighthouse` and click **Continue**
+5. Set the **Name** (`lighthouse`?) and don't change the **Internal Name**
+6. Choose **DynamicWeb app**
+7. Choose `Node.js` as the **language** and `stretch` as the **version**
+8. Set the **Build Command** as `npm install`
+9. Set the **Start Command** as `npm start`
+10. Set the **Port** as `3000` and click **Create Website**
+11. Choose `KINTO` **Branch** on the left side and click **Build Latest Commit** (top right)
+While your block is building
+12. Click **SETTINGS** (top left)
+13. Add **Environment Variable** `HOST`, enable **Required** and click **+**
+14. Add **Environment Variable** `CRON`, enable **Required** and click **+**
+15. Add **Environment Variable** `URLS`, enable **Required** and click **+**
+16. Click **Save** (top right)
 
-> Set `report` if you want to save lighthouse report as html.
+Wait for your build to be successful (green).
 
-> More info about the cron pattern at https://www.npmjs.com/package/cron
+**Note**
+Since there is a Dockerfile in the folder `/lighthouse`, it will be used by default so step `7` to `9` are useless. This will be replace with language `Dockerfile` in the future.
 
-### Dashboards Built-in
+### Grafana
 
-- Single Audit
-  ![Image of Single Page Dashboard](https://raw.githubusercontent.com/FeliceGeracitano/webperf-dashboard/master/static/Single.png)
+1. Click **Create KintoBlock**
+2. Choose [Website Block](https://docs.kintohub.com/docs/kintoblocks/websites)
+3. Choose the repo you forked previously
+4. Set the **Source Folder Path** to `/grafana` and click **Continue**
+5. Set the **Name** (`grafana-webperf`?) and don't change the **Internal Name**
+6. Choose **DynamicWeb app**
+7. Choose `Node.js` as the **language** and `stretch` as the **version**
+8. Set the **Build Command** as `npm install`
+9. Set the **Start Command** as `npm start`
+10. Set the **Port** as `3000` and click **Create Website**
+11. Choose `KINTO` **Branch** on the left side and click **Build Latest Commit** (top right)
+While your block is building
+12. Click **SETTINGS** (top left)
+13. Add **Environment Variable** `GF_SECURITY_ADMIN_PASSWORD`, enable **Required** and click **+**
+14. Add **Environment Variable** `GF_PANELS_DISABLE_SANITIZE_HTML`, set it to `true`, enable **Required** and click **+**
+15. Add **Environment Variable** `INFLUX_URL`, enable **Required** and click **+**
+16. Click **Save** (top right)
 
-Inspired by the lighthouse report, analyze score trend over time, identify performance metric and their thresholds. Read suggestions directly from Latest Lighthouse report embedded in the dashboard
+Wait for your build to be successful (green).
 
-- Versus
-  ![Image of Versus Dashboard](https://raw.githubusercontent.com/FeliceGeracitano/webperf-dashboard/master/static/Versus.png)
+**Note**
+Since there is a Dockerfile in the folder `/grafana`, it will be used by default so step `7` to `9` are useless. This will be replace with language `Dockerfile` in the future.
 
-Pretty much a like Single Page Dashboard but oriented to `1vs1` or `all` comparision.
+## Projects
 
-### Develop `packages/lighthouse`
+Click **Projects** on the left menu.
 
-Comment out `felicegeracitano/webperf-dashboard-lighthouse` service in `docker-compose.yml`, then run to spin up dependecies:
+### Deploy InfluxDB
 
-```bash
-$ docker-compose -f "docker-compose.yml" up -d --build
-$ cd packages/lighthouse && npm start
-```
+1. Click **Create Project**
+2. Set the **Project Name** and don't change the **Internal Name**
+3. Click **Add KintoBlocks...** searchbar, type `influxdb` and select it
+4. Click on the cog icon (on the right)
+5. Set **Environment Variable** `persistence.enabled` to `false`
+6. Set **Environment Variable** `setDefaultUser.enabled` to `false`
+7. Click on **Done Configuring** (top right)
+8. Click on **Create New Project** (bottom right)
 
-### Test local container for `packages/lighthouse`
+Wait for your deployment to be successful (green).
 
-In `docker-compose.yml` replace `felicegeracitano/webperf-dashboard-lighthouse` with
-`webperf-dashboard-lighthouse` (or any other local name you prefer), then run:
+**Note**
+If you did not change the **Hostname** in the config panel before deploying, the hostname to access Influx should be `cs-influx-real-influxdb` on port `8086`.
+If you did change it, check the deployment logs to get the right hostname.
 
-```
-$ cd packages/lighthouse && docker build -t webperf-dashboard-lighthouse .
-$ cd ../.. && docker-compose up
-```
+### Deploy Lighthouse and Grafana
 
-### Deploy your container
+On your Project page (there should be only one environment `dev`)
 
-```
-$ cd packages/lighthouse
-$ docker tag webperf-dashboard-lighthouse:latest felicegeracitano/webperf-dashboard-lighthouse:latest
-$ docker push felicegeracitano/webperf-dashboard-lighthouse:latest
-```
+1. Click **Add KintoBlocks...** searchbar, type `lighthouse` (or the name of your lighthouse kintoblock you create previously) and select it
+2. In the dropdown on the right, select `Kinto` branch (the only one with a build)
+3. Click on the cog icon (on the right)
+4. Set **Environment Variable** `HOST` to `cs-influx-real-influxdb` (or the right hostname from your previous deployment logs)
+5. Set **Environment Variable** `CRON` to the correct cronjob pattern (example: `0 */10 * * * *`)
+6. Set **Environment Variable** `URLS` to one or more urls separated with a `,` (example: `https://www.kintohub.com,https://jfrog.com`)
+7. Change the **MEMORY LIMIT** to `1024MB` to make sure lighthouse have enough memory (can probably be set to lower)
+8. Click on **Done Configuring** (top right)
+9. Click **Add KintoBlocks...** searchbar, type `grafana-webperf` (or the name of your lighthouse kintoblock you create previously) and select it
+10. In the dropdown on the right, select `Kinto` branch (the only one with a build)
+11. Click on the cog icon (on the right)
+12. Set **Environment Variable** `INFLUX_URL` to `http://cs-influx-real-influxdb:8086` (or the right hostname from your previous deployment logs)
+13. Set **Environment Variable** `GF_SECURITY_ADMIN_PASSWORD` to the password your wanna use to login to grafana (example: `K1nt0HuB`)
+14. Click on **Done Configuring** (top right)
+15. Click on **Deploy** (bottom right)
 
-> Tip:  
-> replace latest tag with fixed version etc 1.1, 2.0...
+Wait for your deployment to be successful (green).
 
-### Troubleshooting
+## Access the dashboard
 
-- Kills all running containers with `docker kill $(docker ps -q)`
-- Delete all stopped containers with `docker rm $(docker ps -a -q)`
-- Delete all images with `docker rmi $(docker images -q)`
+On your Project page (there should be only one environment `dev`).
+In the **KintoBlock** list.
 
-### GitHub BOT
-You can improve reviewers life running Lighthouse audit on every PR update.
-In this repo there is an example using a Travis CI, the job communicate progress and result to GitHub.
+1. Click **Open** under `grafana-webperf` card.
 
-Running Job:
-<img src="https://raw.githubusercontent.com/FeliceGeracitano/webperf-dashboard/master/static/Travi%20Ci%20in%20Progress.png" width=800>
-
-Result Comment from the BOT:
-
-<img src="https://raw.githubusercontent.com/FeliceGeracitano/webperf-dashboard/master/static/Audit%20Report.png" width=600>
-
-
-Configure your repo with a Travis Job:
-- Enbale Travis Intergation for your repo (https://travis-ci.com/)
-- Enable build on Pull request: https://travis-ci.com/{owner}/{repo}/settings
-- Generate Github Access token here: https://github.com/settings/tokens
-- Set enviroment an variable called `GITHUB_TOKEN` for your Travis job with the GitHub token here: https://travis-ci.com/{owner}/{repo}/settings
-- Commit a `.travis.yml` file in your repo similar to: https://github.com/FeliceGeracitano/webperf-dashboard/blob/master/.travis.yml
-> if you inspect run_audit.sh you will notice that you need to provide an url of your running up. This obsvously depends on your app, you can choose to build your app in the travis job itsels or provide an external URL.
-- `run_audit.sh` will launch the lighthouse service and inspectig your app, posting the result in the PR created.
-
-### Other Tips
-
-- if you use VSCODE install docker extensions to manage, start & stop containers: https://marketplace.visualstudio.com/items?itemName=peterjausovec.vscode-docker
+Here you go!
