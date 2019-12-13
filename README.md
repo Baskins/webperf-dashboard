@@ -43,22 +43,17 @@ Click **KintoBlocks** on the left menu.
 4. Set the **Source Folder Path** to `/lighthouse` and click **Continue**
 5. Set the **Name** (`lighthouse`?) and don't change the **Internal Name**
 6. Choose **DynamicWeb app**
-7. Choose `Node.js` as the **language** and `stretch` as the **version**
-8. Set the **Build Command** as `npm install`
-9. Set the **Start Command** as `npm start`
-10. Set the **Port** as `3000` and click **Create Website**
-11. Choose `KINTO` **Branch** on the left side and click **Build Latest Commit** (top right)
+7. Choose `Custom Dockerfile` as the **language**
+8. Set the **Port** as `3000` and click **Create Website**
+9. Choose `KINTO` **Branch** on the left side and click **Build Latest Commit** (top right)
 While your block is building
-12. Click **SETTINGS** (top left)
-13. Add **Environment Variable** `HOST`, enable **Required** and click **+**
-14. Add **Environment Variable** `CRON`, enable **Required** and click **+**
-15. Add **Environment Variable** `URLS`, enable **Required** and click **+**
-16. Click **Save** (top right)
+10. Click **SETTINGS** (top left)
+11. Add **Environment Variable** `HOST`, enable **Required** and click **+**
+12. Add **Environment Variable** `CRON`, enable **Required** and click **+**
+13. Add **Environment Variable** `URLS`, enable **Required** and click **+**
+14. Click **Save** (top right)
 
 Wait for your build to be successful (green).
-
-**Note**
-Since there is a Dockerfile in the folder `/lighthouse`, it will be used by default so step `7` to `9` are useless. This will be replace with language `Dockerfile` in the future.
 
 ### Grafana
 
@@ -68,22 +63,17 @@ Since there is a Dockerfile in the folder `/lighthouse`, it will be used by defa
 4. Set the **Source Folder Path** to `/grafana` and click **Continue**
 5. Set the **Name** (`grafana-webperf`?) and don't change the **Internal Name**
 6. Choose **DynamicWeb app**
-7. Choose `Node.js` as the **language** and `stretch` as the **version**
-8. Set the **Build Command** as `npm install`
-9. Set the **Start Command** as `npm start`
-10. Set the **Port** as `3000` and click **Create Website**
-11. Choose `KINTO` **Branch** on the left side and click **Build Latest Commit** (top right)
+7. Choose `Custom Dockerfile` as the **language**
+8. Set the **Port** as `3000` and click **Create Website**
+9. Choose `KINTO` **Branch** on the left side and click **Build Latest Commit** (top right)
 While your block is building
-12. Click **SETTINGS** (top left)
-13. Add **Environment Variable** `GF_SECURITY_ADMIN_PASSWORD`, enable **Required** and click **+**
-14. Add **Environment Variable** `GF_PANELS_DISABLE_SANITIZE_HTML`, set it to `true`, enable **Required** and click **+**
-15. Add **Environment Variable** `INFLUX_URL`, enable **Required** and click **+**
-16. Click **Save** (top right)
+10. Click **SETTINGS** (top left)
+11. Add **Environment Variable** `GF_SECURITY_ADMIN_PASSWORD`, enable **Required** and click **+**
+12. Add **Environment Variable** `GF_PANELS_DISABLE_SANITIZE_HTML`, set it to `true`, enable **Required** and click **+**
+13. Add **Environment Variable** `INFLUX_URL`, enable **Required** and click **+**
+14. Click **Save** (top right)
 
 Wait for your build to be successful (green).
-
-**Note**
-Since there is a Dockerfile in the folder `/grafana`, it will be used by default so step `7` to `9` are useless. This will be replace with language `Dockerfile` in the future.
 
 ## Projects
 
