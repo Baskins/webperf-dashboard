@@ -79,42 +79,39 @@ Wait for your build to be successful (green).
 
 Click **Projects** on the left menu.
 
-### Deploy InfluxDB
+### Configure InfluxDB
 
 1. Click **Create Project**
 2. Set the **Project Name** and don't change the **Internal Name**
-3. Click **Add KintoBlocks...** searchbar, type `influxdb` and select it
+3. Click **Add KintoBlocks...** searchbar, type `influx` and select it
 4. Click on the cog icon (on the right)
 5. Set **Environment Variable** `persistence.enabled` to `false`
 6. Set **Environment Variable** `setDefaultUser.enabled` to `false`
 7. Click on **Done Configuring** (top right)
-8. Click on **Create New Project** (bottom right)
 
-Wait for your deployment to be successful (green).
-
-**Note**
-If you did not change the **Hostname** in the config panel before deploying, the hostname to access Influx should be `cs-influx-real-influxdb` on port `8086`.
-If you did change it, check the deployment logs to get the right hostname.
-
-### Deploy Lighthouse and Grafana
-
-On your Project page (there should be only one environment `dev`)
+### Configure Lighthouse
 
 1. Click **Add KintoBlocks...** searchbar, type `lighthouse` (or the name of your lighthouse kintoblock you create previously) and select it
 2. In the dropdown on the right, select `Kinto` branch (the only one with a build)
 3. Click on the cog icon (on the right)
-4. Set **Environment Variable** `HOST` to `cs-influx-real-influxdb` (or the right hostname from your previous deployment logs)
+4. Set **Environment Variable** `HOST` to `influx`
 5. Set **Environment Variable** `CRON` to the correct cronjob pattern (example: `0 */10 * * * *`)
 6. Set **Environment Variable** `URLS` to one or more urls separated with a `,` (example: `https://www.kintohub.com,https://jfrog.com`)
-7. Change the **MEMORY LIMIT** to `1024MB` to make sure lighthouse have enough memory (can probably be set to lower)
+7. Change the **MEMORY LIMIT** to `512MB` to make sure lighthouse have enough memory
 8. Click on **Done Configuring** (top right)
-9. Click **Add KintoBlocks...** searchbar, type `grafana-webperf` (or the name of your lighthouse kintoblock you create previously) and select it
-10. In the dropdown on the right, select `Kinto` branch (the only one with a build)
-11. Click on the cog icon (on the right)
-12. Set **Environment Variable** `INFLUX_URL` to `http://cs-influx-real-influxdb:8086` (or the right hostname from your previous deployment logs)
-13. Set **Environment Variable** `GF_SECURITY_ADMIN_PASSWORD` to the password your wanna use to login to grafana (example: `K1nt0HuB`)
-14. Click on **Done Configuring** (top right)
-15. Click on **Deploy** (bottom right)
+
+### Configure Grafana
+
+1. Click **Add KintoBlocks...** searchbar, type `grafana-webperf` (or the name of your lighthouse kintoblock you create previously) and select it
+2. In the dropdown on the right, select `Kinto` branch (the only one with a build)
+3. Click on the cog icon (on the right)
+4. Set **Environment Variable** `INFLUX_URL` to `http://influx:8086` (or the right hostname from your previous deployment logs)
+5. Set **Environment Variable** `GF_SECURITY_ADMIN_PASSWORD` to the password your wanna use to login to grafana (example: `K1nt0HuB`)
+6. Click on **Done Configuring** (top right)
+
+### Deploy
+
+1.  Click on **Deploy** (bottom right)
 
 Wait for your deployment to be successful (green).
 
@@ -124,5 +121,11 @@ On your Project page (there should be only one environment `dev`).
 In the **KintoBlock** list.
 
 1. Click **Open** under `grafana-webperf` card.
+
+**Note**
+
+Username == `admin`
+
+
 
 Here you go!
