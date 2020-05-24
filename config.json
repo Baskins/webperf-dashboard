@@ -1,9 +1,8 @@
 {
   "cron": "0 */10 * * * *",
   "urls": [
-    { "url": "http://jfrog.com", "options": { "report": true } },
-    { "url": "https://jfrog.com", "options": { "report": true } },
-    { "url": "https://jfrog.com/blog/", "options": { "report": true } },
-    { "url": "https://jfrog.com/artifactory/", "options": { "report": true } }
+    { "url": "https://nlmk.shop", "options": { "report": true } },
+    { "url": "https://nlmk.shop/catalog/long-products/reinforcement-bars/", "options": { "report": true } },
+    { "url": "https://b2b.nlmk.shop/login", "options": { "report": true } }
   ]
 }
