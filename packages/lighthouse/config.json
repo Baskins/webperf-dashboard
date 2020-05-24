@@ -1,8 +1,8 @@
 {
   "cron": "0 */10 * * * *",
   "urls": [
-    { "url": "https://reactjs.org", "options": { "report": true } },
-    { "url": "https://vuejs.org", "options": { "report": true } },
-    { "url": "https://angular.io", "options": { "report": true } }
+    { "url": "https://nlmk.shop", "options": { "report": true } },
+    { "url": "https://nlmk.shop/catalog/long-products/reinforcement-bars/", "options": { "report": true } },
+    { "url": "https://b2b.nlmk.shop/login", "options": { "report": true } }
   ]
 }
